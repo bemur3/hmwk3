@@ -29,8 +29,8 @@ Here is a link to my repository: {https://github.com/bemur3/hmwk3}
 #| include: false
 #| eval: true
 
-setwd("/Users/ethanmurakami/Documents/GitHub/hmwk3/submission1/Hwk3_workspace.Rdata")
-load("Hwk3_workspace.RData")
+
+load("/Users/ethanmurakami/Documents/GitHub/hmwk3/submission1/Hwk3_workspace.Rdata")
 ```
 
 
