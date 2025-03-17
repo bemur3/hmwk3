@@ -29,8 +29,8 @@ Here is a link to my repository: {https://github.com/bemur3/hmwk3}
 #| include: false
 #| eval: true
 
-setwd()
-load("hwk3_workspace.RData")
+setwd("/Users/ethanmurakami/Documents/GitHub/hmwk3/submission1/Hwk3_workspace.Rdata")
+load("Hwk3_workspace.RData")
 ```
 
 
@@ -40,10 +40,113 @@ load("hwk3_workspace.RData")
 
 ```{r} 
 #| echo: false
-#| label: tax.change.plot
+#| label: tax.changeplot
 
 print(tax.change.plot)
 ```
 
 
 \newpage 
+
+## 2. 
+
+```{r} 
+#| echo: false
+#| label: avtgtax.priceplot
+
+print(avtgtax.price.plot)
+```
+
+\newpage
+
+## 3. 
+
+```{r} 
+#| echo: false
+#| label: top.statesplot
+
+print(top.states.plot)
+```
+
+\newpage
+
+## 4. 
+
+```{r} 
+#| echo: false
+#| label: bottom.statesplot
+
+print(bottom.states.plot)
+```
+
+\newpage
+
+## 5. 
+
+```{r} 
+#| echo: false
+#| label: mergedstatesplot
+
+print(merged.states.plot)
+```
+
+\newpage
+
+## 6. 
+
+```{r} 
+#| echo: false
+#| label: elasticity_model
+
+summary(elasticity_model)
+```
+
+\newpage
+
+## 7. 
+
+```{r} 
+#| echo: false
+#| label: iv_model
+
+summary(iv_model)
+```
+
+\newpage
+
+## 8. 
+
+```{r} 
+#| echo: false
+#| label: me
+
+summary(first_stage)
+summary(reduced_form)
+```
+
+\newpage
+
+## 9. 
+
+```{r} 
+#| echo: false
+#| label: 1990-2015
+
+summary(elasticity_model_b)
+summary(iv_model_b)
+summary(first_stage_b)
+summary(reduced_form_b)
+```
+
+\newpage
+
+## 10. 
+
+```{r} 
+#| echo: false
+#| label: elasticity_comparison_table
+
+print(elasticity_comparison)
+```
+
+

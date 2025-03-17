@@ -17,7 +17,7 @@ final.data.q1 <- final.data %>%
   summarize(proportion = mean(tax_change, na.rm = TRUE)) %>%
   ungroup()
 
-ggplot(final.data.q1, aes(x = Year, y = proportion)) +
+tax.change.plot <- ggplot(final.data.q1, aes(x = Year, y = proportion)) +
   geom_col(fill = "steelblue") +
   labs(title = "Proportion of States with a Change in Cigarette Tax (1970-1985)",
        x = "Year",
@@ -43,7 +43,7 @@ yearly_averages <- final.data.q2 %>%
   )
 
 # Plotting the average tax and price in 2012 dollars
-ggplot(yearly_averages, aes(x = Year)) +
+avtgtax.price.plot <- ggplot(yearly_averages, aes(x = Year)) +
   geom_line(aes(y = average_tax, colour = "Average Tax"), size = 1) +
   geom_line(aes(y = average_price, colour = "Average Price"), size = 1) +
   labs(
@@ -83,7 +83,7 @@ top_states_data <- final.data %>%
   summarize(avg_packs_sold = mean(sales_per_capita, na.rm = TRUE), .groups = "drop")
 
 # Generate the plot
-ggplot(top_states_data, aes(x = Year, y = avg_packs_sold, color = state)) +
+top.states.plot <- ggplot(top_states_data, aes(x = Year, y = avg_packs_sold, color = state)) +
   geom_line(size = 1) +
   geom_point(size = 1, alpha = 0.6) +
   labs(
@@ -118,7 +118,7 @@ bottom_states_data <- final.data %>%
   summarize(avg_packs_sold = mean(sales_per_capita, na.rm = TRUE), .groups = "drop")
 
 # Generate the plot
-ggplot(bottom_states_data, aes(x = Year, y = avg_packs_sold, color = state)) +
+bottom.states.plot <- ggplot(bottom_states_data, aes(x = Year, y = avg_packs_sold, color = state)) +
   geom_line(size = 1) +
   geom_point(size = 1, alpha = 0.6) +
   labs(
@@ -147,7 +147,7 @@ bottom_states_avg <- final.data %>%
 final.data.q5 <- inner_join(top_states_avg, bottom_states_avg, by = "Year")
 
 # Plot the comparison
-ggplot(final.data.q5, aes(x = Year)) + 
+merged.states.plot <- ggplot(final.data.q5, aes(x = Year)) + 
   geom_line(aes(y = avg_packs_top, color = "Top 5 Price Increase"), size = 1.2) +
   geom_line(aes(y = avg_packs_bottom, color = "Bottom 5 Price Increase"), size = 1.2) +
   labs(
@@ -257,3 +257,5 @@ elasticity_comparison <- tibble(
 # Print the table
 print(elasticity_comparison)
 
+rm(list=c("final.data", "final.data.q1", "final.data.q2", "yearly_averages", "final.data.q3", "top_states", "top_states_data"))
+save.image("submission1/Hwk3_workspace.RData")
