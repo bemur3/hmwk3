@@ -1,0 +1,49 @@
+---
+title: "Homework 3"
+subtitle: "ECON 470, Spring 2025"
+author: "Ethan Murakami"
+format:
+  pdf:
+    output-file: "murakami_e_hmwk2_s1"
+    output-ext:  "pdf"
+    header-includes:
+      - \usepackage{float}
+      - \floatplacement{table}{H}
+---
+
+```{r}
+#| include: false
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, ggplot2, dplyr, lubridate, readr, readxl, hrbrthemes, fixest,
+               scales, gganimate, gapminder, gifski, png, tufte, plotly, OECD,
+               ggrepel, survey, foreign, devtools, pdftools, kableExtra, modelsummary,
+               kableExtra)
+```
+
+Here is a link to my repository: {https://github.com/bemur3/hmwk3}
+
+\newpage 
+
+```{r}
+#| include: false
+#| eval: true
+
+setwd()
+load("hwk3_workspace.RData")
+```
+
+
+\newpage 
+
+## 1. Present a bar graph showing the proportion of states with a change in their cigarette tax in each year from 1970 to 1985.
+
+```{r} 
+#| echo: false
+#| label: tax.change.plot
+
+print(tax.change.plot)
+```
+
+
+\newpage 
