@@ -10,7 +10,7 @@ final.data = readRDS('data/output/TaxBurden_Data.rds')
 final.data.q1 <- final.data %>%
   arrange(state, Year) %>%
   group_by(state) %>%
-  mutate(tax_change = if_else(is.na(lag(tax_dollar)) | tax_dollar == lag(tax_dollar), FALSE, TRUE)) %>%
+  mutate(tax_change = if_else(is.na(lag(tax_state)) | tax_state == lag(tax_state), FALSE, TRUE)) %>%
   ungroup() %>%
   filter(Year >= 1970 & Year <= 1985) %>%
   group_by(Year) %>%
@@ -27,7 +27,7 @@ ggplot(final.data.q1, aes(x = Year, y = proportion)) +
 # Question 2
 # Extract the CPI value for 2012 to use as the base for adjustments
 # Adjust tax to 2012 dollars and assume price needs to be adjusted similarly
-final.data <- final.data %>%
+final.data.q2 <- final.data %>%
 filter(Year >= 1970 & Year <= 2018) %>%
   mutate(
     tax_cpi = tax_dollar * (218 / index),  
@@ -35,7 +35,7 @@ filter(Year >= 1970 & Year <= 2018) %>%
   )
 
 # Calculate average tax and price per year
-yearly_averages <- final.data %>%
+yearly_averages <- final.data.q2 %>%
   group_by(Year) %>%
   summarize(
     average_tax = mean(tax_cpi, na.rm = TRUE),
@@ -162,7 +162,7 @@ ggplot(final.data.q5, aes(x = Year)) +
 # Question 6
 library(fixest)
 
-# Filter data for the period 1970-1990
+# Filter data for the period 1970-1990 ADJUST FOR INFLAATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 final.data.q6 <- final.data %>%
   filter(Year >= 1970 & Year <= 1990) %>%
   mutate(
