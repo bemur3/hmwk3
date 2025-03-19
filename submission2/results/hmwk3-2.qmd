@@ -1,0 +1,142 @@
+---
+title: "Homework 3"
+subtitle: "ECON 470, Spring 2025"
+author: "Ethan Murakami"
+format:
+  pdf:
+    output-file: "murakami_e_hmwk2_s1"
+    output-ext:  "pdf"
+    header-includes:
+      - \usepackage{float}
+      - \floatplacement{table}{H}
+---
+
+```{r}
+#| include: false
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, ggplot2, dplyr, lubridate, readr, readxl, hrbrthemes, fixest,
+               scales, gganimate, gapminder, gifski, png, tufte, plotly, OECD,
+               ggrepel, survey, foreign, devtools, pdftools, kableExtra, modelsummary,
+               kableExtra)
+```
+
+Here is a link to my repository: {https://github.com/bemur3/hmwk3}
+
+\newpage 
+
+```{r}
+#| include: false
+#| eval: true
+
+
+load("/Users/ethanmurakami/Documents/GitHub/hmwk3/submission2/Hwk3_workspace.Rdata")
+```
+
+
+\newpage 
+
+## 1. Present a bar graph showing the proportion of states with a change in their cigarette tax in each year from 1970 to 1985.
+
+```{r} 
+#| echo: false
+#| label: tax.changeplot
+
+print(tax.change.plot)
+```
+
+
+\newpage 
+
+## 2. 
+
+```{r} 
+#| echo: false
+#| label: avtgtax.priceplot
+
+print(avtgtax.price.plot)
+```
+
+\newpage
+
+## 3. 
+
+```{r} 
+#| echo: false
+#| label: top.statesplot
+
+print(top.states.plot)
+```
+
+\newpage
+
+## 4. 
+
+```{r} 
+#| echo: false
+#| label: bottom.statesplot
+
+print(bottom.states.plot)
+```
+
+\newpage
+
+## 5. 
+
+```{r} 
+#| echo: false
+#| label: mergedstatesplot
+
+print(merged.states.plot)
+```
+
+\newpage
+
+## 6-10 Made summary table but won't load into quarto pdf. putting code below, please view table in submission history on grade scope
+
+## Load libraries
+library(modelsummary)
+library(gt)
+
+# Create a custom coefficient mapping
+coef_map <- c(
+  "log_price" = "Log Price",
+  "log_price_b" = "Log Price",
+  "fit_log_price" = "Log Price",  # Instrumented log price for IV model
+  "fit_log_price_b" = "Log Price",  # Instrumented log price for IV model (1991-2015)
+  "log_tax" = "Total Tax",
+  "log_tax_b" = "Total Tax"
+)
+
+# Define the list of models
+models <- list(
+  "OLS" = elasticity_model,
+  "IV" = iv_model,
+  "First Stage" = first_stage,
+  "Reduced Form" = reduced_form,
+  "OLS" = elasticity_model_b,
+  "IV" = iv_model_b,
+  "First Stage" = first_stage_b,
+  "Reduced Form" = reduced_form_b
+)
+
+# Generate the regression table 
+modelsummary(models,
+  fmt = 3,  # Round to 3 decimal places
+  statistic = "({std.error})",  # Show standard errors in parentheses
+  stars = TRUE,  # Add significance stars
+  coef_map = coef_map,  # Use the corrected coefficient mapping
+  coef_omit = "Intercept",  # Remove intercept
+  gof_omit = "IC|Adj|Log|RMSE",  # Remove extra goodness-of-fit statistics
+  output = "gt"
+) %>%
+  tab_header(
+    title = "Regression Estimates (OLS & IV)",
+    subtitle = "Comparison of 1970-1990 and 1991-2015"
+  ) %>%
+  tab_spanner(label = "1970-1990 Models", columns = 2:5) %>%
+  tab_spanner(label = "1991-2015 Models", columns = 6:9) %>%
+  tab_options(table.font.size = "medium")
+
+
+
