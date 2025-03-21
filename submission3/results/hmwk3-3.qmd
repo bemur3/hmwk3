@@ -1,0 +1,154 @@
+---
+title: "Homework 3"
+subtitle: "ECON 470, Spring 2025"
+author: "Ethan Murakami"
+format:
+  pdf:
+    output-file: "murakami_e_hmwk2_s1"
+    output-ext:  "pdf"
+    header-includes:
+      - \usepackage{float}
+      - \floatplacement{table}{H}
+---
+
+```{r}
+#| include: false
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, ggplot2, dplyr, lubridate, readr, readxl, hrbrthemes, fixest,
+               scales, gganimate, gapminder, gifski, png, tufte, plotly, OECD,
+               ggrepel, survey, foreign, devtools, pdftools, kableExtra, modelsummary,
+               kableExtra)
+```
+
+Here is a link to my repository: {https://github.com/bemur3/hmwk3}
+
+\newpage 
+
+```{r}
+#| include: false
+#| eval: true
+
+
+load("/Users/ethanmurakami/Documents/GitHub/hmwk3/submission3/Hwk3_workspace.Rdata")
+```
+
+
+\newpage 
+
+## 1. Present a bar graph showing the proportion of states with a change in their cigarette tax in each year from 1970 to 1985.
+
+```{r} 
+#| echo: false
+#| label: Tax Change Plot
+
+print(tax.change.plot)
+```
+
+
+\newpage 
+
+## 2. 
+
+```{r} 
+#| echo: false
+#| label: avtgtax.priceplot
+
+print(avtgtax.price.plot)
+```
+
+\newpage
+
+## 3. 
+
+```{r} 
+#| echo: false
+#| label: top.statesplot
+
+print(top.states.plot)
+```
+
+\newpage
+
+## 4. 
+
+```{r} 
+#| echo: false
+#| label: bottom.statesplot
+
+print(bottom.states.plot)
+```
+
+\newpage
+
+## 5. 
+
+```{r} 
+#| echo: false
+#| label: mergedstatesplot
+
+print(merged.states.plot)
+```
+
+# Pack sales in the top 5 states decreased at a greater rate than those for the bottom 5 states. This makes sense because higher price implies a lower quantity demanded.
+
+\newpage
+
+## 6-10 Summary Regression Statistics Table
+
+```{r} 
+#| echo: false
+
+
+f <- function(x) formatC(x, digits = 0, big.mark = ",", format = "f")
+
+
+modelsummary(list("Estimates"=list("OLS"=elasticity_model, "IV"=iv_model, "OLS"=elasticity_model_b, "IV"=iv_model_b),
+                  "Reduced Form"=list("IV"=reduced_form, "IV"=reduced_form_b),
+                  "First Stage"=list("IV"=first_stage, "IV"=first_stage_b)),
+            shape="rbind",
+            coef_map=c('log_price'="Log Price", 'log_price_b'="Log Price", 'fit_log_price'="Log Price (IV)", 
+                       'fit_log_price_b'="Log Price (IV)", 'log_tax'="Log Tax", 'log_tax_b'="Log Tax"),
+            gof_map=list(list("raw"="nobs", "clean"="N", "fmt"=f), list("raw"="r.squared", "clean"="R2", "fmt"=3)),
+            output="kableExtra") %>%
+    add_header_above(c(" " = 1, "1970-1990" = 2, "1991-2015" = 2)) %>%
+    kable_styling(latex_options = "hold_position")
+
+
+```
+
+\newpage
+
+## 6. Focusing only on the time period from 1970 to 1990, regress log sales on log prices to estimate the price elasticity of demand over that period. Interpret your results.
+
+### The elasticity estimate of -.809 implies that demand for cigarettes in this time period was slightly inelastic, as this coefficient means that a 1% increase in price lead to around a -.81% in cigarette sales. This makes sense because cigarettes are an addictive good, which would therefore mean consumers would be less sensitive to changes in price because they are still motivated to buy cigarettes because their addiction to nicotine. 
+
+
+
+## 7. Again limiting to 1970 to 1990, regress log sales on log prices using the total (federal and state) cigarette tax (in dollars) as an instrument for log prices. Interpret your results and compare your estimates to those without an instrument. Are they different? If so, why?
+
+### The estimate of -.796 is not very different from the OLS estimate using price, which suggests that endogeneity bias is not a significant factor in our results. It also suggests our approach is valid because it shows taxes predict price changes while only affecting demand through price and not directly in itself.
+
+## 8. Show the first stage and reduced-form results from the instrument.
+
+### The first stage regression (see summary table) shows that log price is positively and significantly related to tax. It's significance is proven by its F-statistic, which is around 469 from dividing the estimate of .260 by its standard error and squaring the quotient. The reduced form regression estimates the direct effect of tax on sales. The coefficient is -.207, meaning that higher cigarette taxes are associated with lower sales. These estimates together support the notion that price affected by tax as an instrumental variable has a relationship with cigarette sales.
+
+\newpage
+
+## 9a. Focusing only on the time period from 1991 to 2015, regress log sales on log prices to estimate the price elasticity of demand over that period. Interpret your results.
+
+### The OLS estimate has increased to -.997, meaning that over time, the price elasticity has shifted to almost being unit elastic. This shift is positive, as cigarette demand became slightly more elastic likely due to increased awareness of health risks associated with smoking. This change would imply increased efficacy for policies that raise cigarette sales tax. 
+
+### 9b. Again limiting to 1991 to 2015, regress log sales on log prices using the total (federal and state) cigarette tax (in dollars) as an instrument for log prices. Interpret your results and compare your estimates to those without an instrument. Are they different? If so, why?
+
+# In this time period, the IV estimate is more different than the OLS one (-.997 vs -1.150). This suggests that endogenity could have biased the OLS estimate closer to zero in this period
+
+## 9c. Show the first stage and reduced-form results from the instrument.
+
+### Looking at the summary table the first stage estimate and reduced form estimates are 0.514 and -.591. The F-statistic for the first stage estimate is ~5,391, a measure of significance much greater than the first period. This gives us even more assurance of the validity of our results and the instrument variable.
+
+\newpage
+
+## 10. 
+
+### The results from the regressions indicate that the price elasticity of demand for cigarettes increased in magnitude between the periods 1970–1990 and 1991–2015. In the earlier period, the OLS estimate of elasticity was approximately -0.81, while the IV estimate was -0.80, suggesting that a 1% increase in price led to about a 0.8% decrease in cigarette consumption. In the later period, however, the elasticity became more negative, with OLS estimating around -1.00 and the IV estimate reaching -1.15. This increase in elasticity implies that cigarette demand became more price-sensitive over time. Influencing factors likely include that smoking became more socially discouraged, public health awareness increased, and alternative products or cessation tools became more accessible. These changes may have made consumers more responsive to price increases. The difference between the OLS and IV estimates in the later period also suggests that price endogeneity may have been more of a concern in the 1991–2015 period, with IV methods capturing a stronger causal effect. Overall, the increasing elasticity over time indicates that cigarette taxes have become more effective at reducing smoking, though they may now lead to sharper declines in consumption and potentially less stable tax revenues.
